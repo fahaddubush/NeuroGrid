@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtualenvs
+.venv/
+venv/
+env/
+
+# Environments / secrets
+.env
+.env.local
+.env.*
+!.env.example
+secrets/
+certs/private/
+*.key
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# JVM / Spark crash logs
+hs_err_pid*.log
+hs_err_pid*.mdmp
+replay_pid*.log
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Project artifacts
+artifacts/
+data/district_logs/
+data/raw/
+data/processed*/
+docs/system_memory/episodic/
+*.db
+*.db-wal
+*.db-shm
+# Trained model bundles (entire run directories — only the .gitkeep stays)
+src/models/stored/*/
+src/models/stored/*.pth
+src/models/stored/*.pkl
+src/models/stored/*.npz
+!src/models/stored/.gitkeep
+
+# Claude Code worktrees (internal git state)
+.claude/worktrees/
+.claude/
+vendor/
+
+# Logs / outputs
+*.log
+test_out.txt
+
+# Temp
+*.tmp
+*.swp
+
+# Scratch
+scratch/

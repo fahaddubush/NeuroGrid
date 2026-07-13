@@ -1,0 +1,11 @@
+grpcio==1.80.0
+grpcio-tools==1.80.0
+protobuf==6.33.5
+ortools==9.15.6755
+python-dotenv==1.2.2
+pandas==2.2.3
+numpy==2.0.2
+torch==2.10.0
+scikit-learn==1.5.2
+pyspark==3.5.3
+pyarrow==23.0.1

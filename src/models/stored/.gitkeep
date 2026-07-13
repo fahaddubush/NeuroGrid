@@ -1,0 +1,2 @@
+# Trained model bundles land here. See src/training/curriculum.py for the
+# 6-stage pipeline that populates this directory.

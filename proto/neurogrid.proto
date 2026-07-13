@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package neurogrid;
+
+// FederatedAggregator serves both the District tier (receives building Δθ
+// uploads) and the City tier (receives district summaries). The same RPC
+// surface is sufficient because both tiers run the same FedAvg / Krum loop -
+// only the parent address differs.
+service FederatedAggregator {
+  // Children push Δθ uplink (Building → District, District → City).
+  rpc SendGradient (WeightPayload) returns (AckResponse) {}
+
+  // Children poll for the freshest distilled / aggregated parent model W*.
+  rpc PollDistillation (PollRequest) returns (DistilledModel) {}
+}
+
+message WeightPayload {
+  string agent_id          = 1;
+  int32  round             = 2;
+  bytes  state_dict_bytes  = 3;
+  int32  n_samples         = 4;  // q_k weight for paper's Phase 2 FedAvg
+  string tier              = 5;  // "building" | "district" | "city"
+}
+
+message AckResponse {
+  bool   success = 1;
+  string message = 2;
+  int32  round   = 3;  // server's current round (lets clients resync fast)
+}
+
+message PollRequest {
+  string agent_id      = 1;
+  int32  current_round = 2;
+}
+
+message DistilledModel {
+  bool   available        = 1;
+  int32  round            = 2;
+  bytes  state_dict_bytes = 3;
+  bool   converged        = 4;  // City sets true once ε-gate passes
+}

@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Static checks
+        run: python -m ruff check --select E9,F63,F7,F82 src tests scripts
+      - name: Release hygiene
+        run: python scripts/verify_release.py
+      - name: Tests
+        run: python -m pytest -q -p no:cacheprovider
+      - name: Dependency audit
+        # These PyTorch advisories currently have no published fixed release.
+        # All other current and future findings remain blocking.
+        run: >-
+          python -m pip_audit -r requirements.txt
+          --ignore-vuln PYSEC-2026-139
+          --ignore-vuln GHSA-rrmf-rvhw-rf47
